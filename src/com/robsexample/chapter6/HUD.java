@@ -2,6 +2,7 @@ package com.robsexample.chapter6;
 
 import android.content.Context;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 public class HUD {
 	private int MAX_HUDITEMS = 10;
@@ -90,6 +91,8 @@ public class HUD {
 			item.mNumericalValue = val;
 			item.mDirty = true;
 		}
+		
+		Log.e("u", "adsdf");
 	}
 	
 	void updateHUDItem(Camera cam, HUDItem item) {

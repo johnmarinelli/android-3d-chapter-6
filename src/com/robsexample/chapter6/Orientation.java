@@ -3,6 +3,7 @@ package com.robsexample.chapter6;
 
 import android.opengl.Matrix;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 public class Orientation 
 {
@@ -248,6 +249,64 @@ public class Orientation
 		Matrix.multiplyMM(m_OrientationMatrix, 0, TempMatrix, 0, m_ScaleMatrix, 0);
  
 		return m_OrientationMatrix;
+	}
+	
+	void saveState(String handle) {
+		SharedPreferences settings = m_Context.getSharedPreferences(handle, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		
+		/* linear position */
+		editor.putFloat("x", m_Position.x);
+		editor.putFloat("y", m_Position.y);
+		editor.putFloat("z", m_Position.z);
+		
+		/* rotation axis */
+		editor.putFloat("axisx", m_RotationAxis.x);
+		editor.putFloat("axisy", m_RotationAxis.y);
+		editor.putFloat("axisz", m_RotationAxis.z);
+		
+		/* rotation matrix */
+		for(int i = 0; i < 16; ++i) {
+			editor.putFloat("rotation"+i, m_RotationMatrix[i]);
+		}
+		
+		/* rotation angle */
+		editor.putFloat("rotationangle", m_RotationAngle);
+		
+		/* scale */
+		editor.putFloat("scalex", m_Scale.x);
+		editor.putFloat("scaley", m_Scale.y);
+		editor.putFloat("scalez", m_Scale.z);
+		
+		editor.commit();
+	}
+	
+	void loadState(String handle) {
+		/* restore preferences */
+		SharedPreferences settings = m_Context.getSharedPreferences(handle, 0);
+		
+		float x = settings.getFloat("x", 0);
+	    float y = settings.getFloat("y", 0);
+	    float z = settings.getFloat("z", 0);
+	    m_Position.Set(x, y, z);
+	      
+	    // Rotation Axis
+		float rotx = settings.getFloat("axisx", 0);
+		float roty = settings.getFloat("axisy", 0);
+		float rotz = settings.getFloat("axisz", 0);
+		m_RotationAxis.Set(rotx, roty, rotz); 
+		
+		for(int i = 0; i < 16; ++i) {
+			m_RotationMatrix[i] = settings.getFloat("rotation"+i, 1);
+		}
+		
+		m_RotationAngle = settings.getFloat("rotationangle", 0);
+		  
+		// Scale
+		float scalex = settings.getFloat("scalex", 1);
+		float scaley = settings.getFloat("scaley", 1);
+		float scalez = settings.getFloat("scalez", 1);
+		m_Scale.Set(scalex, scaley, scalez);
 	}
 	
 }

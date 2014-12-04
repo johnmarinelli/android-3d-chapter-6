@@ -10,7 +10,7 @@ import android.content.Context;
 
 public class MainActivity extends Activity {
 	
-	private GLSurfaceView m_GLView;
+	private MyGLSurfaceView m_GLView;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) 
@@ -27,6 +27,7 @@ public class MainActivity extends Activity {
 	protected void onPause() 
 	{
 		super.onPause();
+		m_GLView.mRenderer.saveGameState();
     	m_GLView.onPause();
 	}
 
@@ -44,16 +45,14 @@ public class MainActivity extends Activity {
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
 	}
-	
-	
-	
-
 }
 
 /////////////////////////////////////////////////////////////////////////////////////////
 
 class MyGLSurfaceView extends GLSurfaceView 
 {
+	public MyGLRenderer mRenderer = null;
+	
     public MyGLSurfaceView(Context context) 
     {
         super(context);
@@ -61,8 +60,9 @@ class MyGLSurfaceView extends GLSurfaceView
         // Create an OpenGL ES 2.0 context.
         setEGLContextClientVersion(2);
 
+        mRenderer = new MyGLRenderer(context);
         // Set the Renderer for drawing on the GLSurfaceView
-        setRenderer(new MyGLRenderer(context));
+        setRenderer(mRenderer);
     }
 }
 

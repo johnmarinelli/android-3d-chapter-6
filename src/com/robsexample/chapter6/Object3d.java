@@ -6,6 +6,7 @@ import android.opengl.Matrix;
 import android.os.SystemClock;
 import android.util.Log;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.opengl.GLU;
 
 
@@ -363,5 +364,33 @@ public class Object3d
 	
 	Material getMaterial() {
 		return m_Material;
+	}
+	
+	void saveObjectState(String handle) {
+		SharedPreferences settings = m_Context.getSharedPreferences(handle, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		
+		editor.putBoolean("Visible", mVisible);
+		editor.commit();
+		
+		/* save orientation */
+		String orientationHandle = handle + "Orientation";
+		m_Orientation.saveState(orientationHandle);
+		
+		/* save physics */
+		String physicsHandle = handle + "Physics";
+		mPhysics.saveState(physicsHandle);
+	}
+	
+	void loadObjectState(String handle) {
+		SharedPreferences settings = m_Context.getSharedPreferences(handle, 0);
+		
+		mVisible = settings.getBoolean("Visible", true);
+		
+		String orientationHandle = handle+"orientation";
+		m_Orientation.loadState(orientationHandle);
+		
+		String physicsHandle = handle+"Physics";
+		mPhysics.loadState(physicsHandle);
 	}
 }

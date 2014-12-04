@@ -10,6 +10,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import android.content.Context;
+import android.content.SharedPreferences;
 
 public class MyGLRenderer implements GLSurfaceView.Renderer 
 {
@@ -228,7 +229,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		
     		CreateCube(m_Context);
     		createCube2(m_Context);
-    		
+    		    		
     		createGrid(m_Context);
     		
     		createSoundPool();
@@ -239,6 +240,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		SetupCamera();
     		createCharacterSet(m_Context);
     		createHUD();
+    		
+    		loadGameState();
     	}
 
     	@Override
@@ -522,13 +525,48 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		HUDItem HUDscore = new HUDItem("score", 0, screenPos, mCharacterSet, null, mHUDComposite);
     		mHUD.addHUDItem(HUDscore);
     		createHealthItem();
-    		
-    		Log.d("f", mHUD.mHUDItems[0].mItemName);
     	}
     	
     	void updateHUD() {
     		mHUD.updateHUDItemNumericalValue("health", mHealth);
     		mHUD.updateHUDItemNumericalValue("score", mScore);
+    	}
+    	
+    	void saveCubes() {
+    		m_Cube.saveObjectState("Cube1Data");
+    		mCube2.saveObjectState("Cube2Data");
+    	}
+    	
+    	void loadCubes() {
+    		m_Cube.loadObjectState("Cube1Data");
+    		mCube2.loadObjectState("Cube2Data");
+    	}
+    	
+    	void saveGameState() {
+    		SharedPreferences settings = m_Context.getSharedPreferences("gamestate", 0);
+    		SharedPreferences.Editor editor = settings.edit();
+    		
+    		editor.putInt("health", mHealth);
+    		editor.putInt("score", mScore);
+    		
+    		saveCubes();
+    		editor.putInt("previouslysaved", 1);
+    		editor.commit();
+    	}
+    	
+    	void loadGameState() {
+    		SharedPreferences settings = m_Context.getSharedPreferences("gamestate", 0);
+    		int previouslySaved = settings.getInt("previouslysaved", 0);
+    		//SharedPreferences.Editor e = settings.edit();
+    		//e.putInt("previouslysaved", 0);
+    		
+    		Log.d("SPS", Integer.toString(previouslySaved));
+    		//previouslySaved = 0;
+    		if(previouslySaved != 0) {
+    			mScore = settings.getInt("score", 0);
+    			mHealth = settings.getInt("health", 0);
+    			loadCubes();
+    		}
     	}
 }
 

@@ -1,6 +1,7 @@
 package com.robsexample.chapter6;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 
 public class Physics {
 	enum CollisionStatus
@@ -223,5 +224,47 @@ public class Physics {
 		
 		body1.getPhysics().applyTranslationalForce(force1);
 		body2.getPhysics().applyTranslationalForce(force2);
+	}
+	
+	void saveState(String handle) {
+		SharedPreferences settings = mContext.getSharedPreferences(handle, 0);
+		SharedPreferences.Editor editor = settings.edit();
+		
+		/* linear velocity */
+		editor.putFloat("velx", mVelocity.x);
+		editor.putFloat("vely", mVelocity.y);
+		editor.putFloat("velz", mVelocity.z);
+		
+		/* linear accel */
+		editor.putFloat("ax", mAcceleration.x);
+		editor.putFloat("ay", mAcceleration.y);
+		editor.putFloat("az", mAcceleration.z);
+		
+		/* angular velocity */
+		editor.putFloat("angularvel", mAngularVelocity);
+		
+		/* angular acceleration */
+		editor.putFloat("angularaccel", mAngularAcceleration);
+		
+		editor.commit();
+	}
+	
+	void loadState(String handle) {
+		/* restore preferences */
+		SharedPreferences settings = mContext.getSharedPreferences(handle, 0);
+		
+		float velx = settings.getFloat("velx", 0);
+		float vely = settings.getFloat("vely", 0);
+		float velz = settings.getFloat("velz", 0);
+		mVelocity.Set(velx, vely, velz);
+		
+		/* acceleration */
+		float ax = settings.getFloat("ax", 0);
+	    float ay = settings.getFloat("ay", 0);
+	    float az = settings.getFloat("az", 0);
+		mAcceleration.Set(ax, ay, az);
+		
+		mAngularVelocity = settings.getFloat("angularvel", 0);
+		mAngularAcceleration = settings.getFloat("angularaccel", 0);
 	}
 }
