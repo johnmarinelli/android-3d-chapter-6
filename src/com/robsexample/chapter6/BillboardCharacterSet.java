@@ -121,7 +121,7 @@ public class BillboardCharacterSet {
 				int width = img.getWidth();
 				int xCompositeOffset = x + (width*i);
 				
-				drawFontToComposite(character, x, y, composite);
+				drawFontToComposite(character, xCompositeOffset, y, composite);
 			}
 		}
 	}

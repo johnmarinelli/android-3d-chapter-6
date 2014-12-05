@@ -269,7 +269,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     	public void onDrawFrame(GL10 unused) 
     	{
     		GLES20.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    		GLES20.glClear( GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
+    		GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
     		
     		m_Camera.UpdateCamera();
     		 	 
@@ -298,8 +298,8 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		    //m_Cube.playSound(mSoundIndex1);
     		    //m_Cube.playSound(mSoundIndex2);
     		    
-    		    mHealth--;
-    		    mScore++;
+    		    mHealth = mHealth < 1 ? 100 : mHealth-1;
+    		    mScore = mScore > 99 ? 0 : mScore+1;
     		}
     		  
     		m_Cube.DrawObject(m_Camera, m_PointLight);
@@ -308,6 +308,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		updateGravityGrid();
     	    mGrid.drawGrid(m_Camera);
     	    
+    	    updateHUD();
     	    mHUD.updateHUD(m_Camera);
     	    mHUD.renderHUD(m_Camera, m_PointLight);
     	    
@@ -336,15 +337,15 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     	void createCharacterSetTextures(Context iContext) {
     		/* numeric */
     		mCharacterSetTextures[0] = new Texture(iContext, R.drawable.charset0);
-    		mCharacterSetTextures[1] = new Texture(iContext, R.drawable.charset2);
-    		mCharacterSetTextures[2] = new Texture(iContext, R.drawable.charset3);
-    		mCharacterSetTextures[3] = new Texture(iContext, R.drawable.charset4);
-    		mCharacterSetTextures[4] = new Texture(iContext, R.drawable.charset5);
-    		mCharacterSetTextures[5] = new Texture(iContext, R.drawable.charset6);
-    		mCharacterSetTextures[6] = new Texture(iContext, R.drawable.charset7);
-    		mCharacterSetTextures[7] = new Texture(iContext, R.drawable.charset8);
-    		mCharacterSetTextures[8] = new Texture(iContext, R.drawable.charset9);
-    		mCharacterSetTextures[9] = new Texture(iContext, R.drawable.charset0);
+    		mCharacterSetTextures[1] = new Texture(iContext, R.drawable.charset1);
+    		mCharacterSetTextures[2] = new Texture(iContext, R.drawable.charset2);
+    		mCharacterSetTextures[3] = new Texture(iContext, R.drawable.charset3);
+    		mCharacterSetTextures[4] = new Texture(iContext, R.drawable.charset4);
+    		mCharacterSetTextures[5] = new Texture(iContext, R.drawable.charset5);
+    		mCharacterSetTextures[6] = new Texture(iContext, R.drawable.charset6);
+    		mCharacterSetTextures[7] = new Texture(iContext, R.drawable.charset7);
+    		mCharacterSetTextures[8] = new Texture(iContext, R.drawable.charset8);
+    		mCharacterSetTextures[9] = new Texture(iContext, R.drawable.charset9);
     		 
     		// Alphabet
     		mCharacterSetTextures[10] = new Texture(iContext, R.drawable.charseta);
@@ -560,7 +561,7 @@ public class MyGLRenderer implements GLSurfaceView.Renderer
     		//SharedPreferences.Editor e = settings.edit();
     		//e.putInt("previouslysaved", 0);
     		
-    		Log.d("SPS", Integer.toString(previouslySaved));
+    		Log.d("SPS", settings.toString());
     		//previouslySaved = 0;
     		if(previouslySaved != 0) {
     			mScore = settings.getInt("score", 0);

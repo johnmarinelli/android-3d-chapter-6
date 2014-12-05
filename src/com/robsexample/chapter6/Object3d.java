@@ -374,7 +374,7 @@ public class Object3d
 		editor.commit();
 		
 		/* save orientation */
-		String orientationHandle = handle + "Orientation";
+		String orientationHandle = handle+"Orientation";
 		m_Orientation.saveState(orientationHandle);
 		
 		/* save physics */
@@ -387,7 +387,7 @@ public class Object3d
 		
 		mVisible = settings.getBoolean("Visible", true);
 		
-		String orientationHandle = handle+"orientation";
+		String orientationHandle = handle+"Orientation";
 		m_Orientation.loadState(orientationHandle);
 		
 		String physicsHandle = handle+"Physics";

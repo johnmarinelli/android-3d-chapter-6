@@ -91,8 +91,6 @@ public class HUD {
 			item.mNumericalValue = val;
 			item.mDirty = true;
 		}
-		
-		Log.e("u", "adsdf");
 	}
 	
 	void updateHUDItem(Camera cam, HUDItem item) {
